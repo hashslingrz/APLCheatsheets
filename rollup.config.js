@@ -1,9 +1,11 @@
 import svelte from 'rollup-plugin-svelte';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import json from '@rollup/plugin-json';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
+
+// Additional imports
+import json from '@rollup/plugin-json';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -13,7 +15,7 @@ export default {
 		sourcemap: true,
 		format: 'iife',
 		name: 'app',
-		file: 'public/build/bundle.js'
+		file: 'docs/build/bundle.js'
 	},
 	plugins: [
 		svelte({
@@ -22,7 +24,7 @@ export default {
 			// we'll extract any component CSS out into
 			// a separate file - better for performance
 			css: css => {
-				css.write('public/build/bundle.css');
+				css.write('docs/build/bundle.css');
 			}
 		}),
 
@@ -36,6 +38,8 @@ export default {
 			dedupe: ['svelte']
 		}),
 		commonjs(),
+		
+		// Additional plugins
 		json(),
 
 		// In dev mode, call `npm run start` once

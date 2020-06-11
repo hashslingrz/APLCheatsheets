@@ -5,34 +5,10 @@ import Grid from "svelte-grid";
 import gridHelp from "svelte-grid/build/helper";
 import map from "lodash.map";
 
-//import headers from '../data/headers.json';
-//import rows from '../data/content.json';
-  let rows = [
-	{
-	id: "a",
-	ucmd: "]box -trains=tree -fns=on",
-	action: "Enable boxing with trains and fns"
-	},
-	{
-	id: "b",
-	ucmd: "]rows -fold=3",
-	action: "Compress excessive output"
-	},
-	{
-	id: "c",
-	ucmd: "]chart",
-	action: "Chart"
-	},
-  	{
-	id: "d",
-	ucmd: "]plot",
-	action: "Plot"
-	}
-];
-let headers = [
-	{ key: "ucmd", value: "Command" },
-	{ key: "action", value: "Action" }
-];
+import ucmd_h from '../data/ucmd_h.json';
+import ucmd_c from '../data/ucmd_c.json';
+import shortcut_h from '../data/shortcut_h.json';
+import shortcut_c from '../data/shortcut_c.json';
 
 const id = () =>
   "_" +
@@ -56,11 +32,14 @@ function generateLayout(col) {
 
 const randomNumberInRange = (min, max) => Math.random() * (max - min) + min;
 let adjustAfterRemove = false;
-let cols = 8;
+let cols = 6;
 let layout = generateLayout(cols);
 
-let items = gridHelp.resizeItems(layout, cols);
-//let items = [gridHelp.item({ x: 0, y: 0, w: 2, h: 2, id: id() }), gridHelp.item({ x: 2, y: 0, w: 2, h: 2, id: id() })];
+//let items = gridHelp.resizeItems(layout, cols);
+let items = [
+	gridHelp.item({ x: 0, y: 0, w: 2, h: 3, id: id(), title: "User Commands", header: ucmd_h, row: ucmd_c }),
+	gridHelp.item({ x: 2, y: 0, w: 2, h: 6, id: id(), title: "Shortcuts", header: shortcut_h, row: shortcut_c })
+];
 	
 let breakpoints = [[1100, 5], [800, 4], [530, 1]];
 </script>
@@ -80,7 +59,7 @@ let breakpoints = [[1100, 5], [800, 4], [530, 1]];
 	</div>
 	<Grid {breakpoints} bind:items={items} {cols} let:item rowHeight={100} gap={2}>
 		<div class="content" style="background: #ccc; border: 1px solid black;">
-			<DataTable size="short" title="User Commands" {rows} {headers}></DataTable>
+			<DataTable size="short" title={item.title} rows={item.row} headers={item.header}></DataTable>
 		</div>
 	</Grid>
 </main>
@@ -101,14 +80,6 @@ let breakpoints = [[1100, 5], [800, 4], [530, 1]];
     -webkit-flex: 0 0 auto;
         -ms-flex: 0 0 auto;
             flex: 0 0 auto;
-}
-#left {
-  display: table-cell;
-  width: auto;
-}
-#right {
-	display: table-cell;
-	width: auto;
 }
 .content {
 	width: 100%;
@@ -140,5 +111,4 @@ let breakpoints = [[1100, 5], [800, 4], [530, 1]];
 	text-transform: uppercase;
 	font-weight: 700;
 }
-
 </style>
