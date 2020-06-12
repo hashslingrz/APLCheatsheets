@@ -16,10 +16,10 @@ const updateSearch = (e) => {
 	let tmp = e.target.value;
 	if (tmp.length != null) {
 		if (tmp.length > searchQuery.length) {
-			cheatsheets.push(items.filter(item => item.title.includes(tmp)));
+			cheatsheets.push(cheatsheets[searchIndexer].filter(item => item.title.includes(tmp)));
 			searchIndexer += (tmp.length - searchQuery.length);
 		} else {
-			cheatsheets.pop(items.filter(item => item.title.includes(tmp)));
+			cheatsheets.pop();
 			searchIndexer -= (searchQuery.length - tmp.length);
 		}
 		searchQuery = tmp;
@@ -27,7 +27,6 @@ const updateSearch = (e) => {
 		searchQuery = "";
 		searchIndexer = 0;
 	}
-	//console.log(tmp);
 }
 
 let cols = 6;
@@ -47,8 +46,7 @@ const mousedown = (e) => {
 }
 
 const pin = item => {
-	console.log("pinned!");
-	const reMapItems = items.map(value => {
+	const reMapItems = cheatsheets[searchIndexer].map(value => {
 		if (value.id === item.id) {
 			return {
 				...value,
@@ -61,7 +59,7 @@ const pin = item => {
 		}
 		return value;
 	});
-	items = reMapItems;
+	cheatsheets[searchIndexer] = reMapItems;
 };
 </script>
 
