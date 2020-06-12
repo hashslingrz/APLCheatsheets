@@ -40,6 +40,16 @@ let items = [
 	gridHelp.item({ x: 0, y: 0, w: 2, h: 3, id: id(), title: "User Commands", header: ucmd_h, row: ucmd_c }),
 	gridHelp.item({ x: 2, y: 0, w: 2, h: 6, id: id(), static: true, title: "Shortcuts", header: shortcut_h, row: shortcut_c })
 ];
+var filteredItems = items;
+const filterItems = (e) => {
+	let tmp = e.target.value;
+	console.log(tmp);
+	if (tmp.length != null) {
+		filteredItems = items.filter(item => item.title.indexOf(tmp) !== -1);
+	} else {
+		filterItems = items;
+	}
+}
 
 // Responsive breakpoints
 let breakpoints = [[1100, 4], [800, 2], [530, 1]];
@@ -78,10 +88,10 @@ const pin = item => {
 			<h1>Dyalog APL Cheatsheets</h1>
 		</div>
 		<div class="flexitem" style="width: 100%">
-			<Search></Search>
+			<Search on:input={filterItems} inline=true></Search>
 		</div>
 	</div>
-	<Grid {breakpoints} bind:items={items} {cols} let:item rowHeight={100} gap={2}>
+	<Grid {breakpoints} bind:items={filteredItems} {cols} let:item rowHeight={100} gap={2}>
 		<div class="content" style="background: {item.static ? '#cce' : '#ccc'}; border: 1px solid black;">
 			<div class="pin">
 				<input id={item.id} type="checkbox" name={item.id} checked={item.static} on:click={pin.bind(null, item)} on:mousedown={mousedown}/>
