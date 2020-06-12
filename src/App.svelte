@@ -38,10 +38,34 @@ let layout = generateLayout(cols);
 //let items = gridHelp.resizeItems(layout, cols);
 let items = [
 	gridHelp.item({ x: 0, y: 0, w: 2, h: 3, id: id(), title: "User Commands", header: ucmd_h, row: ucmd_c }),
-	gridHelp.item({ x: 2, y: 0, w: 2, h: 6, id: id(), title: "Shortcuts", header: shortcut_h, row: shortcut_c })
+	gridHelp.item({ x: 2, y: 0, w: 2, h: 6, id: id(), static: true, title: "Shortcuts", header: shortcut_h, row: shortcut_c })
 ];
-	
-let breakpoints = [[1100, 5], [800, 4], [530, 1]];
+
+// Responsive breakpoints
+let breakpoints = [[1100, 4], [800, 2], [530, 1]];
+
+const mousedown = (e) => {
+	e.preventDefault()
+	e.stopPropagation()
+	e.stopImmediatePropagation()
+}
+
+const pin = item => {
+  const reMapItems = items.map(value => {
+    if (value.id === item.id) {
+      return {
+        ...value,
+        ...{
+          static: !value.static,
+          draggable: !value.draggable,
+          resizable: !value.resizable
+        }
+      };
+    }
+    return value;
+  });
+  items = reMapItems;
+};
 </script>
 
 <svelte:head>
@@ -58,13 +82,41 @@ let breakpoints = [[1100, 5], [800, 4], [530, 1]];
 		</div>
 	</div>
 	<Grid {breakpoints} bind:items={items} {cols} let:item rowHeight={100} gap={2}>
-		<div class="content" style="background: #ccc; border: 1px solid black;">
+		<div class="content" style="background: {item.static ? '#cce' : '#ccc'}; border: 1px solid black;">
+			<div class="pin">
+				<input id={item.id} type="checkbox" name={item.id} checked={item.static} on:click={pin.bind(null, item)} on:mousedown={mousedown}/>
+				<label for={item.id}></label>
+			</div>
 			<DataTable size="short" title={item.title} rows={item.row} headers={item.header}></DataTable>
 		</div>
 	</Grid>
 </main>
 
 <style>
+.pin {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+.pin input[type="checkbox"] {
+	display: none;
+}
+.pin input + label {
+	display: inline-block;
+	margin-top: 4px;
+	margin-right: 2px;
+	width: 25px;
+	height: 25px;
+	cursor: pointer;
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-image: url(../assets/unpinned.png);
+}
+.pin input[type="checkbox"]:checked + label {
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-image: url(../assets/pinned.png)
+}
 .flexbox {
     display: -webkit-flex;
     display: -ms-flexbox;
