@@ -10,46 +10,32 @@ import ucmd_c from '../data/ucmd_c.json';
 import shortcut_h from '../data/shortcut_h.json';
 import shortcut_c from '../data/shortcut_c.json';
 
-const id = () =>
-  "_" +
-  Math.random()
-    .toString(36)
-    .substr(2, 9);
-
-function generateLayout(col) {
-	// new Array(number_of_items)
-  return map(new Array(10), function(item, i) {
-    const y = Math.ceil(Math.random() * 4) + 1;
-    return gridHelp.item({
-      x: (i * 2) % col,
-      y: Math.floor(i / 6) * y,
-      w: 2,
-      h: y,
-      id: id()
-    });
-  });
-}
-
-const randomNumberInRange = (min, max) => Math.random() * (max - min) + min;
-let adjustAfterRemove = false;
-let cols = 6;
-let layout = generateLayout(cols);
-
-//let items = gridHelp.resizeItems(layout, cols);
-let items = [
-	gridHelp.item({ x: 0, y: 0, w: 2, h: 3, id: id(), title: "User Commands", header: ucmd_h, row: ucmd_c }),
-	gridHelp.item({ x: 2, y: 0, w: 2, h: 6, id: id(), static: true, title: "Shortcuts", header: shortcut_h, row: shortcut_c })
-];
-var filteredItems = items;
-const filterItems = (e) => {
+let searchQuery = "";
+let searchIndexer = 0;
+const updateSearch = (e) => {
 	let tmp = e.target.value;
-	console.log(tmp);
 	if (tmp.length != null) {
-		filteredItems = items.filter(item => item.title.indexOf(tmp) !== -1);
+		if (tmp.length > searchQuery.length) {
+			cheatsheets.push(items.filter(item => item.title.includes(tmp)));
+			searchIndexer += (tmp.length - searchQuery.length);
+		} else {
+			cheatsheets.pop(items.filter(item => item.title.includes(tmp)));
+			searchIndexer -= (searchQuery.length - tmp.length);
+		}
+		searchQuery = tmp;
 	} else {
-		filterItems = items;
+		searchQuery = "";
+		searchIndexer = 0;
 	}
+	//console.log(tmp);
 }
+
+let cols = 6;
+let items = [
+	gridHelp.item({ x: 0, y: 0, w: 2, h: 3, id: "ucmds", title: "User Commands", header: ucmd_h, row: ucmd_c }),
+	gridHelp.item({ x: 2, y: 0, w: 2, h: 6, id: "shortcuts", static: true, title: "Shortcuts", header: shortcut_h, row: shortcut_c })
+];
+let cheatsheets = [items];
 
 // Responsive breakpoints
 let breakpoints = [[1100, 4], [800, 2], [530, 1]];
@@ -61,20 +47,21 @@ const mousedown = (e) => {
 }
 
 const pin = item => {
-  const reMapItems = items.map(value => {
-    if (value.id === item.id) {
-      return {
-        ...value,
-        ...{
-          static: !value.static,
-          draggable: !value.draggable,
-          resizable: !value.resizable
-        }
-      };
-    }
-    return value;
-  });
-  items = reMapItems;
+	console.log("pinned!");
+	const reMapItems = items.map(value => {
+		if (value.id === item.id) {
+			return {
+				...value,
+				...{
+					static: !value.static,
+					draggable: !value.draggable,
+					resizable: !value.resizable
+				}
+			};
+		}
+		return value;
+	});
+	items = reMapItems;
 };
 </script>
 
@@ -88,10 +75,10 @@ const pin = item => {
 			<h1>Dyalog APL Cheatsheets</h1>
 		</div>
 		<div class="flexitem" style="width: 100%">
-			<Search on:input={filterItems} inline=true></Search>
+			<Search on:input={updateSearch} inline=true></Search>
 		</div>
 	</div>
-	<Grid {breakpoints} bind:items={filteredItems} {cols} let:item rowHeight={100} gap={2}>
+	<Grid {breakpoints} bind:items={cheatsheets[searchIndexer]} {cols} let:item rowHeight={100} gap={2}>
 		<div class="content" style="background: {item.static ? '#cce' : '#ccc'}; border: 1px solid black;">
 			<div class="pin">
 				<input id={item.id} type="checkbox" name={item.id} checked={item.static} on:click={pin.bind(null, item)} on:mousedown={mousedown}/>
