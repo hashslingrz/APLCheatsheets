@@ -5,6 +5,12 @@ import Grid from "svelte-grid";
 import gridHelp from "svelte-grid/build/helper";
 import map from "lodash.map";
 
+import JsonUrl from "./json-url.js";
+const jib = JsonUrl("lzma");
+
+const urlParams = new URLSearchParams(window.location.search);
+const encodedLayout = urlParams.get('q');
+
 import ucmd_h from '../data/ucmd_h.json';
 import ucmd_c from '../data/ucmd_c.json';
 import shortcut_h from '../data/shortcut_h.json';
@@ -34,7 +40,15 @@ let items = [
 	gridHelp.item({ x: 0, y: 0, w: 2, h: 3, id: "ucmds", title: "User Commands", header: ucmd_h, row: ucmd_c }),
 	gridHelp.item({ x: 2, y: 0, w: 2, h: 6, id: "shortcuts", static: true, title: "Shortcuts", header: shortcut_h, row: shortcut_c })
 ];
-let cheatsheets = [items];
+
+let cheatsheets = [];
+if (encodedLayout == null) {
+	cheatsheets = [items];
+} else {
+	cheatsheets = [items];
+	//jib.decompress(encodedLayout).then(output => { console.log(output); });
+	jib.decompress(encodedLayout).then(output => { cheatsheets = [output]; });
+}
 
 // Responsive breakpoints
 let breakpoints = [[1100, 4], [800, 2], [530, 1]];
@@ -60,6 +74,8 @@ const pin = item => {
 		return value;
 	});
 	cheatsheets[searchIndexer] = reMapItems;
+	//console.log(JSON.stringify(cheatsheets[searchIndexer]));
+	jib.compress(cheatsheets[searchIndexer]).then(output => { console.log(output); });
 };
 </script>
 
