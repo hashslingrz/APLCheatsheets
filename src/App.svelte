@@ -45,8 +45,6 @@ let cheatsheets = [];
 if (encodedLayout == null) {
 	cheatsheets = [items];
 } else {
-	cheatsheets = [items];
-	//jib.decompress(encodedLayout).then(output => { console.log(output); });
 	jib.decompress(encodedLayout).then(output => { cheatsheets = [output]; });
 }
 
