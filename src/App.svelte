@@ -86,15 +86,11 @@ const pin = item => {
 </svelte:head>
 
 <main>
-	<div class="flexbox">
-		<div class="flexitem">
-			<h1>Dyalog APL Cheatsheets</h1>
-		</div>
-		<div class="flexitem">
+	<div class="topnav">
+	    <h1 class="topnav-left">Dyalog APL Cheatsheets</h1>
+		<div class="topnav-right">
 			<Button on:click={jib.compress(cheatsheets[searchIndexer]).then(output => { console.log(output); })}>Save</Button>
-		</div>
-		<div class="flexitem" style="width: 100%">
-			<Search on:input={updateSearch} inline=true></Search>
+			<Search on:input={updateSearch}></Search>
 		</div>
 	</div>
 	<Grid {breakpoints} bind:items={cheatsheets[searchIndexer]} {cols} let:item rowHeight={100} gap={2}>
@@ -109,6 +105,30 @@ const pin = item => {
 </main>
 
 <style>
+.topnav {
+	padding-left: 2ex;
+	padding-right: 2ex;
+	overflow: hidden;
+	background-color: #e9e9e9;
+}
+.topnav-left {
+	display: block;
+	float: left;
+	text-align: center;
+}
+.topnav-right {
+	display: flex;
+	float: right;
+}
+@media screen and (max-width: 768px) {
+	.topnav-left, .topnav-right {
+		float: none;
+		display: block;
+		text-align: left;
+		width: 100%;
+		margin: 0;
+	}
+}
 .pin {
 	position: absolute;
 	top: 0;
@@ -133,22 +153,6 @@ const pin = item => {
 	background-repeat: no-repeat;
 	background-image: url(../assets/pinned.png)
 }
-.flexbox {
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-	width: 100%
-}
-.flexitem {
-    min-width: 0;
-	width: auto;
-    margin: 5px;
-}
-.flexitem:nth-child(1) { /*DO NOT SHRINK*/
-    -webkit-flex: 0 0 auto;
-        -ms-flex: 0 0 auto;
-            flex: 0 0 auto;
-}
 .content {
 	width: 100%;
 	height: 100%;
@@ -157,6 +161,9 @@ const pin = item => {
 	justify-content: center;
 	align-items: center;
 	font-size: large;
+}
+:global(.bx--search-close) {
+	display: none !important;
 }
 :global(.svlt-grid-shadow) {
 	/*transition: top 0.2s, left 0.2s;*/
