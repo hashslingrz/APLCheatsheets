@@ -1,5 +1,6 @@
 <script>
 import { DataTable } from "carbon-components-svelte";
+import { Button } from "carbon-components-svelte";
 import { Search } from "carbon-components-svelte";
 import Grid from "svelte-grid";
 import gridHelp from "svelte-grid/build/helper";
@@ -22,12 +23,17 @@ const updateSearch = (e) => {
 	let tmp = e.target.value;
 	if (tmp.length != null) {
 		if (tmp.length > searchQuery.length) {
-			cheatsheets.push(cheatsheets[searchIndexer].filter(item => item.title.includes(tmp)));
+			for (let i = searchQuery.length; i < tmp.length; i++) {
+				cheatsheets.push(cheatsheets[i].filter(item => item.title.includes(tmp)));
+			}
 			searchIndexer += (tmp.length - searchQuery.length);
 		} else {
-			cheatsheets.pop();
+			for (let i = tmp.length; i < searchQuery.length; i++) {
+				cheatsheets.pop();
+			}
 			searchIndexer -= (searchQuery.length - tmp.length);
 		}
+		//console.log(searchIndexer+" "+tmp);
 		searchQuery = tmp;
 	} else {
 		searchQuery = "";
@@ -72,8 +78,6 @@ const pin = item => {
 		return value;
 	});
 	cheatsheets[searchIndexer] = reMapItems;
-	//console.log(JSON.stringify(cheatsheets[searchIndexer]));
-	jib.compress(cheatsheets[searchIndexer]).then(output => { console.log(output); });
 };
 </script>
 
@@ -85,6 +89,9 @@ const pin = item => {
 	<div class="flexbox">
 		<div class="flexitem">
 			<h1>Dyalog APL Cheatsheets</h1>
+		</div>
+		<div class="flexitem">
+			<Button on:click={jib.compress(cheatsheets[searchIndexer]).then(output => { console.log(output); })}>Save</Button>
 		</div>
 		<div class="flexitem" style="width: 100%">
 			<Search on:input={updateSearch} inline=true></Search>
