@@ -1,5 +1,6 @@
 {
     "id":"ucmd",
+    "title":"User Commands",
     "headers": [
         { "key":"ucmd", "value":"User Command" },
         { "key":"action", "value":"Action" }

@@ -10,7 +10,7 @@ let items = [
 		w: 2,
 		h: 3,
 		id: ucmd.id,
-		title: "User Commands",
+		title: ucmd.title,
 		header: ucmd.headers,
 		row: ucmd.rows
 	}),
@@ -21,7 +21,7 @@ let items = [
 		h: 6,
 		id: shortcuts.id,
 		static: true,
-		title: "Shortcuts",
+		title: shortcuts.title,
 		header: shortcuts.headers,
 		row: shortcuts.rows
 	})

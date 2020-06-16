@@ -1,5 +1,6 @@
 {
     "id":"shortcuts",
+    "title":"Shortcuts",
     "headers": [
         { "key":"shortcut", "value":"Shortcut" },
         { "key":"action", "value":"Action" }
