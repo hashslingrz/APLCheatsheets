@@ -1,9 +1,13 @@
 <script>
 import { DataTable } from "carbon-components-svelte";
-import { Button } from "carbon-components-svelte";
+//import { Button } from "carbon-components-svelte";
 import { Search } from "carbon-components-svelte";
 import Grid from "svelte-grid";
 import map from "lodash.map";
+
+// Handle pop-up dialog when saving layout
+import SaveLayout from './SaveLayout.svelte';
+import Modal from 'svelte-simple-modal';
 
 // Load cheatsheet layouts from JSON files
 import { items } from "./load-layouts.js";
@@ -39,13 +43,13 @@ const updateSearch = (e) => {
 
 // Handle decoding query parameter into layout
 const urlParams = new URLSearchParams(window.location.search);
-const encodedLayout = urlParams.get('q');
+const layoutParam = urlParams.get('q');
 let cols = 6;
 let cheatsheets = [];
-if (encodedLayout == null) {
+if (layoutParam == null) {
 	cheatsheets = [items];
 } else {
-	jib.decompress(encodedLayout).then(output => { cheatsheets = [output]; });
+	jib.decompress(layoutParam).then(output => { cheatsheets = [output]; });
 }
 
 // Responsive breakpoints
@@ -82,10 +86,11 @@ const pin = item => {
 </svelte:head>
 
 <main>
+	<Modal>
 	<div class="topnav">
 	    <h1 class="topnav-left">Dyalog APL Cheatsheets</h1>
 		<div class="topnav-right">
-			<Button on:click={jib.compress(cheatsheets[searchIndexer]).then(output => { console.log(output); })}>Save</Button>
+			<SaveLayout codePromise={jib.compress(cheatsheets[searchIndexer])}/>
 			<Search on:input={updateSearch}></Search>
 		</div>
 	</div>
@@ -98,6 +103,7 @@ const pin = item => {
 			<DataTable size="short" title={item.title} rows={item.row} headers={item.header}></DataTable>
 		</div>
 	</Grid>
+	</Modal>
 </main>
 
 <style>
