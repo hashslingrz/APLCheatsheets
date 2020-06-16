@@ -20,6 +20,7 @@
     "svelte-grid": "^1.10.8"
   },
   "dependencies": {
-    "sirv-cli": "^0.4.4"
+    "sirv-cli": "^0.4.4",
+    "svelte-simple-modal": "^0.4.2"
   }
 }
