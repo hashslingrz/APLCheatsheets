@@ -1,0 +1,69 @@
+{
+    "id":"shortcuts",
+    "headers": [
+        { "key":"shortcut", "value":"Shortcut" },
+        { "key":"action", "value":"Action" }
+    ],
+    "rows": [
+        {
+            "id":"a",
+            "shortcut":"Ctrl-Home/End",
+            "action":"INCLUDE FUNCTION HERE"
+        },
+        {
+            "id":"b",
+            "shortcut":"Shift-Enter",
+            "action":"INCLUDE FUNCTION HERE"
+        },
+        {
+            "id":"c",
+            "shortcut":"Ctrl-Enter",
+            "action":"INCLUDE FUNCTION HERE"    
+        },
+        {
+            "id":"d",
+            "shortcut":"Esc",
+            "action":"INCLUDE FUNCTION HERE"
+        },
+        {
+            "id":"e",
+            "shortcut":"Shift-Esc",
+            "action":"INCLUDE FUNCTION HERE"
+        },
+        {
+            "id":"f",
+            "shortcut":"Ctrl-Up Arrow",
+            "action":"INCLUDE FUNCTION HERE"
+        },
+        {
+            "id":"g",
+            "shortcut":"NumPad-[line numbers]",
+            "action":"INCLUDE FUNCTION HERE"
+        },
+        {
+            "id":"h",
+            "shortcut":"NumPad/ [reformat]",
+            "action":"INCLUDE FUNCTION HERE"
+        },
+        {
+            "id":"i",
+            "shortcut":"Ctrl-Delete",
+            "action":"INCLUDE FUNCTION HERE"
+        },
+        {
+            "id":"j",
+            "shortcut":"Ctrl-Shift-Backspace",
+            "action":"INCLUDE FUNCTION HERE"
+        },
+        {
+            "id":"k",
+            "shortcut":"Ctrl-Shift-Enter",
+            "action":"INCLUDE FUNCTION HERE"
+        },
+        {
+            "id":"l",
+            "shortcut":"Ctrl(-Shift)-Tab",
+            "action":"INCLUDE FUNCTION HERE"
+        }
+    ]
+}

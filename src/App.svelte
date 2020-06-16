@@ -12,10 +12,8 @@ const jib = JsonUrl("lzma");
 const urlParams = new URLSearchParams(window.location.search);
 const encodedLayout = urlParams.get('q');
 
-import ucmd_h from '../data/ucmd_h.json';
-import ucmd_c from '../data/ucmd_c.json';
-import shortcut_h from '../data/shortcut_h.json';
-import shortcut_c from '../data/shortcut_c.json';
+import ucmd from '../data/ucmd.json';
+import shortcuts from '../data/shortcuts.json';
 
 let searchQuery = "";
 let searchIndexer = 0;
@@ -43,8 +41,27 @@ const updateSearch = (e) => {
 
 let cols = 6;
 let items = [
-	gridHelp.item({ x: 0, y: 0, w: 2, h: 3, id: "ucmds", title: "User Commands", header: ucmd_h, row: ucmd_c }),
-	gridHelp.item({ x: 2, y: 0, w: 2, h: 6, id: "shortcuts", static: true, title: "Shortcuts", header: shortcut_h, row: shortcut_c })
+	gridHelp.item({
+			x: 0,
+			y: 0,
+			w: 2,
+			h: 3,
+			id: ucmd.id,
+			title: "User Commands",
+			header: ucmd.headers,
+			row: ucmd.rows
+	}),
+	gridHelp.item({
+		x: 2,
+		y: 0,
+		w: 2,
+		h: 6,
+		id: shortcuts.id,
+		static: true,
+		title: "Shortcuts",
+		header: shortcuts.headers,
+		row: shortcuts.rows
+	})
 ];
 
 let cheatsheets = [];

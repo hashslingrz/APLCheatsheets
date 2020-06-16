@@ -1,0 +1,29 @@
+{
+    "id":"ucmd",
+    "headers": [
+        { "key":"ucmd", "value":"User Command" },
+        { "key":"action", "value":"Action" }
+    ],
+    "rows": [
+        {
+            "id":"a",
+            "ucmd":"]box -trains=tree -fns=on",
+            "action":"Enable boxing with trains and fns"
+        },
+        {
+            "id":"b",
+            "ucmd":"]rows -fold=3",
+            "action":"Compress excessive output"
+        },
+        {
+            "id":"c",
+            "ucmd":"]chart",
+            "action":"Chart"
+        },
+        {
+            "id":"d",
+            "ucmd":"]plot",
+            "action":"Plot"
+        }
+    ]
+}
