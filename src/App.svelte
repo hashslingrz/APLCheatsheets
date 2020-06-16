@@ -3,18 +3,16 @@ import { DataTable } from "carbon-components-svelte";
 import { Button } from "carbon-components-svelte";
 import { Search } from "carbon-components-svelte";
 import Grid from "svelte-grid";
-import gridHelp from "svelte-grid/build/helper";
 import map from "lodash.map";
 
+// Load cheatsheet layouts from JSON files
+import { items } from "./load-layouts.js";
+
+// Library for encoding JSON objects for use in URLs
 import JsonUrl from "./json-url.js";
 const jib = JsonUrl("lzma");
 
-const urlParams = new URLSearchParams(window.location.search);
-const encodedLayout = urlParams.get('q');
-
-import ucmd from '../data/ucmd.json';
-import shortcuts from '../data/shortcuts.json';
-
+// Handle search bar "stack" functionality
 let searchQuery = "";
 let searchIndexer = 0;
 const updateSearch = (e) => {
@@ -39,31 +37,10 @@ const updateSearch = (e) => {
 	}
 }
 
+// Handle decoding query parameter into layout
+const urlParams = new URLSearchParams(window.location.search);
+const encodedLayout = urlParams.get('q');
 let cols = 6;
-let items = [
-	gridHelp.item({
-			x: 0,
-			y: 0,
-			w: 2,
-			h: 3,
-			id: ucmd.id,
-			title: "User Commands",
-			header: ucmd.headers,
-			row: ucmd.rows
-	}),
-	gridHelp.item({
-		x: 2,
-		y: 0,
-		w: 2,
-		h: 6,
-		id: shortcuts.id,
-		static: true,
-		title: "Shortcuts",
-		header: shortcuts.headers,
-		row: shortcuts.rows
-	})
-];
-
 let cheatsheets = [];
 if (encodedLayout == null) {
 	cheatsheets = [items];
@@ -74,12 +51,14 @@ if (encodedLayout == null) {
 // Responsive breakpoints
 let breakpoints = [[1100, 4], [800, 2], [530, 1]];
 
+// Mouse handling utility
 const mousedown = (e) => {
 	e.preventDefault()
 	e.stopPropagation()
 	e.stopImmediatePropagation()
 }
 
+// Cheatsheet pinning functionality
 const pin = item => {
 	const reMapItems = cheatsheets[searchIndexer].map(value => {
 		if (value.id === item.id) {
@@ -183,8 +162,6 @@ const pin = item => {
 	display: none !important;
 }
 :global(.svlt-grid-shadow) {
-	/*transition: top 0.2s, left 0.2s;*/
-	/*transition: transform 0.2s;*/
 	transition: width 0.3s, height 0.3s;
 	background: #0000FF;
 }
