@@ -1,20 +1,41 @@
 <script>
 import { DataTable } from "carbon-components-svelte";
-//import { Button } from "carbon-components-svelte";
 import { Search } from "carbon-components-svelte";
 import Grid from "svelte-grid";
+import gridHelp from "svelte-grid/build/helper";
 import map from "lodash.map";
 
 // Handle pop-up dialog when saving layout
 import SaveLayout from './SaveLayout.svelte';
 import Modal from 'svelte-simple-modal';
 
-// Load cheatsheet layouts from JSON files
-import { items } from "./load-layouts.js";
-
 // Library for encoding JSON objects for use in URLs
 import JsonUrl from "./json-url.js";
 const jib = JsonUrl("lzma");
+
+// Handle decoding query parameter into layout
+const urlParams = new URLSearchParams(window.location.search);
+const layoutParam = urlParams.get('q');
+let cols = 6;
+let stack = [];
+let defaultSheets = [];
+if (layoutParam == null) {
+	// Read list of cheatsheets & fetch each associated JSON file
+	fetch("data/cheatsheets.txt")
+		.then(response => response.text())
+		.then(sheetList => {
+			let files = (sheetList.split("\n")).filter(item => item);
+			const requests = files.map((jsonfile) => {
+			    return fetch("data/"+jsonfile+".json")
+					.then(response => response.json())
+					.then(cheatsheet => defaultSheets.push(gridHelp.item(cheatsheet)));
+			})
+			Promise.all(requests).then(() => stack = [defaultSheets]);
+		}
+	);
+} else {
+	jib.decompress(layoutParam).then(output => { stack = [output]; });
+}
 
 // Handle search bar "stack" functionality
 let searchQuery = "";
@@ -24,12 +45,12 @@ const updateSearch = (e) => {
 	if (tmp.length != null) {
 		if (tmp.length > searchQuery.length) {
 			for (let i = searchQuery.length; i < tmp.length; i++) {
-				cheatsheets.push(cheatsheets[i].filter(item => item.title.includes(tmp)));
+				stack.push(stack[i].filter(item => item.title.includes(tmp)));
 			}
 			searchIndexer += (tmp.length - searchQuery.length);
 		} else {
 			for (let i = tmp.length; i < searchQuery.length; i++) {
-				cheatsheets.pop();
+				stack.pop();
 			}
 			searchIndexer -= (searchQuery.length - tmp.length);
 		}
@@ -39,17 +60,6 @@ const updateSearch = (e) => {
 		searchQuery = "";
 		searchIndexer = 0;
 	}
-}
-
-// Handle decoding query parameter into layout
-const urlParams = new URLSearchParams(window.location.search);
-const layoutParam = urlParams.get('q');
-let cols = 6;
-let cheatsheets = [];
-if (layoutParam == null) {
-	cheatsheets = [items];
-} else {
-	jib.decompress(layoutParam).then(output => { cheatsheets = [output]; });
 }
 
 // Responsive breakpoints
@@ -64,7 +74,7 @@ const mousedown = (e) => {
 
 // Cheatsheet pinning functionality
 const pin = item => {
-	const reMapItems = cheatsheets[searchIndexer].map(value => {
+	const reMapItems = stack[searchIndexer].map(value => {
 		if (value.id === item.id) {
 			return {
 				...value,
@@ -77,7 +87,7 @@ const pin = item => {
 		}
 		return value;
 	});
-	cheatsheets[searchIndexer] = reMapItems;
+	stack[searchIndexer] = reMapItems;
 };
 </script>
 
@@ -90,11 +100,11 @@ const pin = item => {
 	<div class="topnav">
 	    <h1 class="topnav-left">Dyalog APL Cheatsheets</h1>
 		<div class="topnav-right">
-			<SaveLayout codePromise={jib.compress(cheatsheets[searchIndexer])}/>
+			<SaveLayout codePromise={jib.compress(stack[searchIndexer])}/>
 			<Search on:input={updateSearch}></Search>
 		</div>
 	</div>
-	<Grid {breakpoints} bind:items={cheatsheets[searchIndexer]} {cols} let:item rowHeight={100} gap={2}>
+	<Grid {breakpoints} bind:items={stack[searchIndexer]} {cols} let:item rowHeight={100} gap={2}>
 		<div class="content" style="background: {item.static ? '#cce' : '#ccc'}; border: 1px solid black;">
 			<div class="pin">
 				<input id={item.id} type="checkbox" name={item.id} checked={item.static} on:click={pin.bind(null, item)} on:mousedown={mousedown}/>
