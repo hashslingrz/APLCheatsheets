@@ -1,11 +1,16 @@
 {
+    "x":0,
+    "y":0,
+    "w":2,
+    "h":3,
     "id":"ucmd",
+    "static": false,    
     "title":"User Commands",
-    "headers": [
+    "header": [
         { "key":"ucmd", "value":"User Command" },
         { "key":"action", "value":"Action" }
     ],
-    "rows": [
+    "row": [
         {
             "id":"a",
             "ucmd":"]box -trains=tree -fns=on",

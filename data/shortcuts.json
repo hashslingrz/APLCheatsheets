@@ -1,11 +1,16 @@
 {
+    "x":2,
+    "y":0,
+    "w":2,
+    "h":6,
     "id":"shortcuts",
+    "static": true,
     "title":"Shortcuts",
-    "headers": [
+    "header": [
         { "key":"shortcut", "value":"Shortcut" },
         { "key":"action", "value":"Action" }
     ],
-    "rows": [
+    "row": [
         {
             "id":"a",
             "shortcut":"Ctrl-Home/End",
