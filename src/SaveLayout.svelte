@@ -2,12 +2,16 @@
 import { Button } from "carbon-components-svelte";
 import { getContext } from 'svelte';
 import Popup from './Popup.svelte';
+import JsonUrl from "./json-url.js";
+
+const jib = JsonUrl("lzma");
 const { open } = getContext('simple-modal');
 
-export let codePromise;
+export let layoutToSave;
 
 const saveLayout = () => {
-    open(Popup, { promise: codePromise});
+    let codePromise = jib.compress(layoutToSave);
+    open(Popup, { promise: codePromise });
 };
 </script> 
 

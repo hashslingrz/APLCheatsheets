@@ -100,7 +100,7 @@ const pin = item => {
 	<div class="topnav">
 	    <h1 class="topnav-left">Dyalog APL Cheatsheets</h1>
 		<div class="topnav-right">
-			<SaveLayout codePromise={jib.compress(stack[searchIndexer])}/>
+			<SaveLayout layoutToSave={stack[searchIndexer]}/>
 			<Search on:input={updateSearch}></Search>
 		</div>
 	</div>
