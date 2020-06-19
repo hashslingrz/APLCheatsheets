@@ -15,7 +15,7 @@ Below is a bare-bones cheatsheet example:
     "id":"example",
     "static": false,    
     "title":"Example Cheatsheet",
-    "header": [t
+    "header": [
         { "key":"instruction", "value":"How to Do Something" },
         { "key":"result", "value":"What Happens as a Result" }
     ],
@@ -29,7 +29,7 @@ Below is a bare-bones cheatsheet example:
             "id":"a",
             "instruction":"Learn APL",
             "result":"Wonder why you ever used anything else"
-        },
+        }
     ]
 }
 ```
